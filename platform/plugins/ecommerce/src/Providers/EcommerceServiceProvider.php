@@ -50,6 +50,7 @@ use Botble\Ecommerce\Models\ShippingRule;
 use Botble\Ecommerce\Models\ShippingRuleItem;
 use Botble\Ecommerce\Models\StoreLocator;
 use Botble\Ecommerce\Models\Tax;
+use Botble\Ecommerce\Models\VendorSubscription;
 use Botble\Ecommerce\Models\Wishlist;
 use Botble\Ecommerce\Repositories\Caches\AddressCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\BrandCacheDecorator;
@@ -83,6 +84,7 @@ use Botble\Ecommerce\Repositories\Caches\ShippingRuleCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\ShippingRuleItemCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\StoreLocatorCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\TaxCacheDecorator;
+use Botble\Ecommerce\Repositories\Caches\VendorSubscriptionCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\WishlistCacheDecorator;
 use Botble\Ecommerce\Repositories\Eloquent\AddressRepository;
 use Botble\Ecommerce\Repositories\Eloquent\BrandRepository;
@@ -116,6 +118,7 @@ use Botble\Ecommerce\Repositories\Eloquent\ShippingRuleItemRepository;
 use Botble\Ecommerce\Repositories\Eloquent\ShippingRuleRepository;
 use Botble\Ecommerce\Repositories\Eloquent\StoreLocatorRepository;
 use Botble\Ecommerce\Repositories\Eloquent\TaxRepository;
+use Botble\Ecommerce\Repositories\Eloquent\VendorSubscriptionRepository;
 use Botble\Ecommerce\Repositories\Eloquent\WishlistRepository;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\BrandInterface;
@@ -149,6 +152,7 @@ use Botble\Ecommerce\Repositories\Interfaces\ShippingRuleInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ShippingRuleItemInterface;
 use Botble\Ecommerce\Repositories\Interfaces\StoreLocatorInterface;
 use Botble\Ecommerce\Repositories\Interfaces\TaxInterface;
+use Botble\Ecommerce\Repositories\Interfaces\VendorSubscriptionInterface;
 use Botble\Ecommerce\Repositories\Interfaces\WishlistInterface;
 use Botble\Ecommerce\Services\Footprints\Footprinter;
 use Botble\Ecommerce\Services\Footprints\FootprinterInterface;
@@ -358,6 +362,12 @@ class EcommerceServiceProvider extends ServiceProvider
         $this->app->bind(DiscountInterface::class, function () {
             return new DiscountCacheDecorator(
                 new DiscountRepository(new Discount())
+            );
+        });
+
+        $this->app->bind(VendorSubscriptionInterface::class, function () {
+            return new VendorSubscriptionCacheDecorator(
+                new VendorSubscriptionRepository(new VendorSubscription())
             );
         });
 

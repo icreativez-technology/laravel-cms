@@ -51,6 +51,24 @@ Route::group([
                 'uses' => 'DashboardController@index',
             ]);
 
+            Route::get('subscriptions', [
+                'as' => 'index',
+                'uses' => 'VendorSubscriptionController@index',
+            ]);
+
+            Route::get('plans', [
+                'as' => 'plans',
+                'uses' => 'VendorSubscriptionController@plans',
+            ]);
+            Route::get('plans/purchase', [
+                'as' => 'purchase',
+                'uses' => 'VendorSubscriptionController@purchasePlan',
+            ]);
+            Route::post('plans/checkout/{token}', [
+                'as' => 'checkout',
+                'uses' => 'VendorSubscriptionController@postCheckout',
+            ]);
+
             Route::get('settings', [
                 'as' => 'settings',
                 'uses' => 'SettingController@index',
@@ -78,8 +96,7 @@ Route::group([
                     'store',
                     'edit',
                     'update',
-                ]);
-
+                ]);    
             Route::group(['prefix' => 'withdrawals'], function () {
                 Route::get('show/{id}', [
                     'as' => 'withdrawals.show',

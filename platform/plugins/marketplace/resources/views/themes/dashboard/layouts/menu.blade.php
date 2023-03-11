@@ -83,6 +83,14 @@
             'order' => 6,
         ]);
     }
+    if (EcommerceHelper::isSubscriptionsEnabled()) {
+        $menus->push([
+            'key'   => 'marketplace.vendor.index',
+            'icon'  => 'icon material-icons md-money',
+            'name'  => __('Subscriptions'),
+            'order' => 5,
+        ]);
+    }
 
     $currentRouteName = Route::currentRouteName();
 @endphp

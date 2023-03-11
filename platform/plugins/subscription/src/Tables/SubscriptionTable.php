@@ -65,9 +65,11 @@ class SubscriptionTable extends TableAbstract
         $query = $this->repository->getModel()->select([
             'id',
             'name',
-            'amount',
+            'monthly_amount',
+            'yearly_amount',
             'product_upload_limit',
-            'duration',
+            'monthly_duration',
+            'yearly_duration',
             'addons',
             'subscription_logo',
             'status',
@@ -88,16 +90,24 @@ class SubscriptionTable extends TableAbstract
                 'title' => trans('plugins/subscription::subscription.subscription_name'),
                 'class' => 'text-start',
             ],
-            'amount' => [
-                'title' => trans('plugins/subscription::subscription.amount'),
+            'monthly_amount' => [
+                'title' => trans('plugins/subscription::subscription.monthly_amount'),
+                'class' => 'text-start',
+            ],
+            'yearly_amount' => [
+                'title' => trans('plugins/subscription::subscription.yearly_amount'),
                 'class' => 'text-start',
             ],
             'product_upload_limit' => [
                 'title' => trans('plugins/subscription::subscription.product_upload_limit'),
                 'class' => 'text-start',
             ],
-            'duration' => [
-                'title' => trans('plugins/subscription::subscription.duration'),
+            'monthly_duration' => [
+                'title' => trans('plugins/subscription::subscription.monthly_duration'),
+                'class' => 'text-start',
+            ],
+            'yearly_duration' => [
+                'title' => trans('plugins/subscription::subscription.yearly_duration'),
                 'class' => 'text-start',
             ],
             'created_at' => [

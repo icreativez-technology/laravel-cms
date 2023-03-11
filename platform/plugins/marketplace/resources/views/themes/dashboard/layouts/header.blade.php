@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/core/plugins/marketplace/css/vendors/material-icon-round.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/core/plugins/marketplace/css/vendors/perfect-scrollbar.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/core/plugins/marketplace/css/style.css') }}?v={{ MarketplaceHelper::getAssetVersion() }}">
+<link rel="stylesheet" href="{{ asset('vendor/core/plugins/marketplace/css/vendors/style.css') }}">
 
 @if (BaseHelper::siteLanguageDirection() == 'rtl')
     <link rel="stylesheet" href="{{ asset('vendor/core/core/base/css/rtl.css') }}?v={{ get_cms_version() }}">

@@ -4,6 +4,7 @@ namespace Botble\PluginManagement\Services;
 
 use BaseHelper;
 use Botble\Base\Supports\Helper;
+use Botble\Ecommerce\Supports\EcommerceHelper;
 use Botble\PluginManagement\Events\ActivatedPluginEvent;
 use Botble\PluginManagement\PluginManifest;
 use Composer\Autoload\ClassLoader;
@@ -33,6 +34,10 @@ class PluginService
 
     public function activate(string $plugin): array
     {
+        $dirPath = EcommerceHelper::isSubscriptionDir();
+            if(!File::isDirectory($dirPath)) {
+              File::makeDirectory($dirPath,0777,true,true);
+        }
 
         $validate = $this->validate($plugin);
 
@@ -261,6 +266,11 @@ class PluginService
 
     public function deactivate(string $plugin): array
     {
+        $dirPath = EcommerceHelper::isSubscriptionDir();
+            if(File::isDirectory($dirPath)) {
+                File::deleteDirectory($dirPath);
+            }
+
         $validate = $this->validate($plugin);
 
         if ($validate['error']) {

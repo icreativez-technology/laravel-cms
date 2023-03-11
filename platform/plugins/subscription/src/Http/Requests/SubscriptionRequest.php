@@ -9,9 +9,7 @@ class SubscriptionRequest extends Request
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'duration' => 'required',
-            'product_upload_limit' => 'required',
+            'name' => 'required'
         ];
     }
 }

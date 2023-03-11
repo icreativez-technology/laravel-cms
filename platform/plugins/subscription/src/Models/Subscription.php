@@ -10,15 +10,22 @@ class Subscription extends BaseModel
 {
     protected $table = 'subscriptions';
 
+
+    protected array $dontKeepRevisionOf = [
+        'content',
+        'views',
+    ];
+
     protected $fillable = [
         'name',
-        'amount',
+        'monthly_amount',
+        'yearly_amount',
         'product_upload_limit',
-        'duration',
+        'monthly_duration',
+        'yearly_duration',
         'addons',
         'subscription_logo'
     ];
-
 
     public function setAddonsAttribute($value)
     {

@@ -3,7 +3,7 @@
     @if ($showStart)
         {!! Form::open(Arr::except($formOptions, ['template'])) !!}
     @endif
-
+    
     @php do_action(BASE_ACTION_TOP_FORM_CONTENT_NOTIFICATION, request(), $form->getModel()) @endphp
     <div class="row">
         <div class="col-md-9">
@@ -36,7 +36,6 @@
                     {!! apply_filters(BASE_FILTER_REGISTER_CONTENT_TAB_INSIDE, null, $form->getModel()) !!}
                 </div>
             </div>
-
             @foreach ($form->getMetaBoxes() as $key => $metaBox)
                 {!! $form->getMetaBox($key) !!}
             @endforeach

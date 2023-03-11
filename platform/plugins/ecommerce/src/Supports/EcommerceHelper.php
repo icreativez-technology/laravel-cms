@@ -18,6 +18,7 @@ use Botble\Location\Repositories\Interfaces\StateInterface;
 use Botble\Location\Rules\CityRule;
 use Botble\Location\Rules\StateRule;
 use Botble\Payment\Enums\PaymentMethodEnum;
+use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use Cart;
 use Exception;
@@ -52,6 +53,19 @@ class EcommerceHelper
     public function isReviewEnabled(): bool
     {
         return get_ecommerce_setting('review_enabled', 1) == 1;
+    }
+
+    public static function isSubscriptionsEnabled()
+    {
+        if (is_plugin_active('subscription')) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function isSubscriptionDir(){
+        return plugin_path().'/marketplace/resources/views/themes/dashboard/subscriptions';
     }
 
     public function isOrderTrackingEnabled(): bool

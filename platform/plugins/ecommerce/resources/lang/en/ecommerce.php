@@ -167,4 +167,5 @@ return [
     'basic_settings' => 'Basic settings',
     'advanced_settings' => 'Advanced settings',
     'product_review_list' => 'Product review list',
+  
 ];

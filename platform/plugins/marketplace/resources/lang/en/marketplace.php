@@ -59,6 +59,7 @@ return [
         'products_count' => 'Products Count',
     ],
     'vendors' => 'Vendors',
+    'vendors_subscription_plans' => 'Vendor Purchase Subscriptions',
     'payout_payment_methods' => [
         'bank_transfer' => 'Bank Transfer',
         'paypal' => 'PayPal',

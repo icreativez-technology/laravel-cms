@@ -38,6 +38,7 @@
             </article>
         </div>
     </div>
+    @if(EcommerceHelper::isSubscriptionsEnabled())
     <div class="col-lg-3">
         <div class="card card-body mb-4">
             <article class="icontext">
@@ -46,11 +47,12 @@
                 </span>
                 <div class="text">
                     <h6 class="mb-1 card-title">{{ __('Plans') }}</h6>
-                    <button class="btn btn-success">Upgrade Plan</button>
+                    <button class="btn btn-success"><a href="{{ route('marketplace.vendor.plans') }}">Upgrade Plan</a></button>
                 </div>
             </article>
         </div>
     </div>
+    @endif
 </div>
 
 

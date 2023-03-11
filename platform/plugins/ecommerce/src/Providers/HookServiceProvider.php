@@ -25,6 +25,7 @@ use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Services\Gateways\BankTransferPaymentService;
 use Botble\Payment\Services\Gateways\CodPaymentService;
 use Botble\Payment\Supports\PaymentHelper;
+use Botble\Subscription\Repositories\Interfaces\SubscriptionInterface;
 use Botble\Theme\Supports\ThemeSupport;
 use Carbon\Carbon;
 use Cart;
@@ -504,7 +505,7 @@ class HookServiceProvider extends ServiceProvider
                 ]);
 
                 $paymentData = apply_filters(PAYMENT_FILTER_PAYMENT_DATA, [], $request);
-
+                
                 switch ($request->input('payment_method')) {
                     case PaymentMethodEnum::COD:
 
@@ -536,6 +537,72 @@ class HookServiceProvider extends ServiceProvider
             }, 120, 2);
         }
 
+
+        if (defined('PAYMENT_FILTER_PAYMENT_DATA_FOR_SUBSCRIPTION')) {
+            add_filter(PAYMENT_FILTER_PAYMENT_DATA_FOR_SUBSCRIPTION, function (array $data, Request $request) {
+                // $packageId = (array)$request->input('packageId', []);
+
+                // $orders = $this->app->make(SubscriptionInterface::class)
+                //     ->getModel()
+                //     ->whereIn('id', 1)
+                //     ->get();
+
+                // $subscription = [
+                //     'seller_id'=>auth('customer')->check() ? auth('customer')->id() : null,
+                //     'subscription_id'=>1,
+                //     'amount'=>100,
+                //     'payment_method'=>'stripe'
+                // ];
+
+                return [
+                    'amount' => 100,
+                    'currency' => strtoupper(get_application_currency()->title),
+                    'subscription_id' => 1,
+                    'customer_id' => auth('customer')->check() ? auth('customer')->id() : null,
+                    'customer_type' => Customer::class,
+                    'return_url' => PaymentHelper::getCancelURL(),
+                    'callback_url' => PaymentHelper::getRedirectURL(),
+                ];
+            }, 120, 2);
+
+            if (! $this->app->runningInConsole()) {
+                add_action(INVOICE_PAYMENT_CREATED, function (Invoice $invoice) {
+                    try {
+                        $customer = $invoice->payment->customer;
+                        $localDisk = Storage::disk('local');
+                        $invoiceName = 'invoice-' . $invoice->code . '.pdf';
+                        $localDisk->put($invoiceName, (new InvoiceHelper())->makeInvoicePDF($invoice)->output());
+
+                        EmailHandler::setModule(ECOMMERCE_MODULE_SCREEN_NAME)
+                            ->setVariableValues([
+                                'customer_name' => $customer->name,
+                                'invoice_code' => $invoice->code,
+                                'invoice_link' => route('customer.invoices.show', $invoice->id),
+                            ])
+                            ->sendUsingTemplate('invoice-payment-created', $customer->email, [
+                                'attachments' => [$localDisk->path($invoiceName)],
+                            ]);
+
+                        $localDisk->delete($invoiceName);
+                    } catch (Exception $exception) {
+                        info($exception->getMessage());
+                    }
+                });
+            }
+
+            if (is_plugin_active('payment')) {
+                add_filter(PAYMENT_FILTER_PAYMENT_INFO_DETAIL, function ($data, $payment) {
+                    $invoice = Invoice::where('payment_id', $payment->id)->first();
+
+                    if (! $invoice) {
+                        return $data;
+                    }
+                    $button = view('plugins/ecommerce::invoices.invoice-buttons', compact('invoice'))->render();
+                    return $data . $button;
+                }, 3, 2);
+            }
+        }
+
         if (defined('PAYMENT_FILTER_PAYMENT_DATA')) {
             add_filter(PAYMENT_FILTER_PAYMENT_DATA, function (array $data, Request $request) {
                 $orderIds = (array)$request->input('order_id', []);
@@ -562,7 +629,7 @@ class HookServiceProvider extends ServiceProvider
 
                 $firstOrder = $orders->sortByDesc('created_at')->first();
 
-                $address = $firstOrder->address;
+               // $address = $firstOrder->address;
 
                 return [
                     'amount' => (float)$orders->sum('amount'),
@@ -632,6 +699,7 @@ class HookServiceProvider extends ServiceProvider
                 }, 3, 2);
             }
         }
+
     }
 
     public function addThemeOptions()

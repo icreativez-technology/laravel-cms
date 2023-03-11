@@ -13,4 +13,5 @@ class VendorController extends BaseController
 
         return $table->renderTable();
     }
+  
 }
